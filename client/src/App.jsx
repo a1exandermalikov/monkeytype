@@ -2,6 +2,7 @@ import { Header } from './components/Header.jsx'
 import { GlobalRipple } from './components/GlobalRipple.jsx'
 import { Nav } from './components/Nav.jsx'
 import { TypingBox } from './components/TypingBox.jsx'
+import { Footer } from './components/Footer.jsx'
 import {
 	TypingSettingsProvider,
 	useTypingSettings,
@@ -20,6 +21,7 @@ function AppContent() {
 			<Header />
 			<Nav />
 			<TypingBox mode={settings.mode} onStartTyping={handleStartTyping} />
+			<Footer />
 		</>
 	)
 }

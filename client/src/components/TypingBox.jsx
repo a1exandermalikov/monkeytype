@@ -258,19 +258,37 @@ const TypingBox = ({ onStartTyping, mode }) => {
 
 	const handleBackspace = typedArr => {
 		if (typedArr.length === 0) return typedArr
-		const lastChar = typedArr[typedArr.length - 1]
-		if (lastChar === ' ' && wordCountTyped > 0) {
+
+		const lastIndex = typedArr.length - 1
+		const lastChar = typedArr[lastIndex]
+
+		// Определяем, был ли последний введенный символ концом слова
+		// Для этого проверяем, есть ли слово, которое заканчивается на lastIndex в исходном тексте
+
+		// Функция для проверки, что индекс lastIndex — конец слова
+		const isWordEnd = index => {
+			if (index >= limitedText.length) return false
+			if (limitedText[index] === ' ') return false
+			// Если следующий символ пробел или конец текста — значит конец слова
+			return limitedText[index + 1] === ' ' || index + 1 === limitedText.length
+		}
+
+		// Если удаляется символ, который был концом слова, уменьшаем счётчик
+		if (isWordEnd(lastIndex) && wordCountTyped > 0) {
 			setWordCountTyped(wordCountTyped - 1)
 		}
+
 		const newTyped = [...typedArr]
 		newTyped.pop()
 		setCurrentCharIndex(newTyped.length)
+
 		const lineStartIndex = charCountByLine
 			.slice(0, currentLineTyping)
 			.reduce((a, b) => a + b, 0)
 		if (newTyped.length < lineStartIndex && currentLineTyping > 0) {
 			setCurrentLineTyping(currentLineTyping - 1)
 		}
+
 		return newTyped
 	}
 
@@ -278,13 +296,13 @@ const TypingBox = ({ onStartTyping, mode }) => {
 		if (currentCharIndex >= limitedText.length) return typedArr
 		const newTyped = [...typedArr, char]
 
-		if (mode === 'words') {
-			const nextSpaceIndex = limitedText.indexOf(' ', currentCharIndex + 1)
-			const wordEndIndex =
-				nextSpaceIndex === -1 ? limitedText.length - 1 : nextSpaceIndex - 1
-			if (currentCharIndex === wordEndIndex) {
-				setWordCountTyped(prev => prev + 1)
-			}
+		// Проверяем, напечатали ли мы последний символ слова
+		const nextSpaceIndex = limitedText.indexOf(' ', currentCharIndex + 1)
+		const wordEndIndex =
+			nextSpaceIndex === -1 ? limitedText.length - 1 : nextSpaceIndex - 1
+
+		if (currentCharIndex === wordEndIndex) {
+			setWordCountTyped(prev => prev + 1)
 		}
 
 		const lineStartIndex = charCountByLine

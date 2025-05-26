@@ -2,7 +2,7 @@
 
 :root {
 	--main-color: #222222;
-	--secondary-color: #171717;
+	--secondary-color: #151515;
 	--brand-color: #00c900;
 	--brand-font: 'Akaya Telivigala', cursive;
 	--text-font: 'Montserrat', 'monospace';
@@ -28,6 +28,11 @@
 
 body {
 	background-color: var(--main-color);
+	height: 100svh;
+}
+
+body::-webkit-scrollbar {
+	width: 0;
 }
 
 .icon {
@@ -53,4 +58,8 @@ body {
 
 .btn:active {
 	transform: scale(0.9);
+}
+
+a {
+	text-decoration: none;
 }

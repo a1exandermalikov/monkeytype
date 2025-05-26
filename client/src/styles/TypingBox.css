@@ -112,6 +112,11 @@
 	margin-top: 2vw;
 }
 
+.status-bar span {
+	font-weight: 400;
+	font-family: var(--system-font);
+}
+
 .measure-element {
 	visibility: hidden;
 	position: absolute;
@@ -143,6 +148,7 @@
 	gap: 0.5vw;
 	background-color: var(--secondary-color);
 	border-radius: var(--border-radius);
+	font-family: var(--system-font);
 }
 
 .result span {
