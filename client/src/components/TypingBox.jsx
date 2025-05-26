@@ -106,14 +106,24 @@ const TypingBox = ({ onStartTyping, mode }) => {
 		if (!measureRef.current || !containerRef.current) return
 
 		const containerWidth = containerRef.current.clientWidth
+
+		// Обновим стили measureRef, чтобы совпадали с контейнером (если надо)
+		const containerStyles = getComputedStyle(containerRef.current)
+		const measureElem = measureRef.current
+		measureElem.style.fontSize = containerStyles.fontSize
+		measureElem.style.fontFamily = containerStyles.fontFamily
+		measureElem.style.fontWeight = containerStyles.fontWeight
+		measureElem.style.letterSpacing = containerStyles.letterSpacing
+		measureElem.style.whiteSpace = 'nowrap'
+
 		let currentLine = ''
 		let linesArr = []
 
 		for (let word of words) {
 			const testLine = currentLine ? currentLine + ' ' + word : word
-			measureRef.current.textContent = testLine
+			measureElem.textContent = testLine
 
-			const measuredWidth = measureRef.current.getBoundingClientRect().width
+			const measuredWidth = measureElem.getBoundingClientRect().width
 
 			if (measuredWidth > containerWidth) {
 				if (currentLine) linesArr.push(currentLine)
@@ -124,8 +134,19 @@ const TypingBox = ({ onStartTyping, mode }) => {
 		}
 		if (currentLine) linesArr.push(currentLine)
 		linesArr.push('')
+
 		setLines(linesArr.map(line => line + ' '))
 	}, [limitedText, words])
+
+	// Добавляем обработчик ресайза
+	useEffect(() => {
+		const handleResize = () => {
+			// просто вызовем пересчёт, изменив состояние, чтобы useEffect сработал
+			setText(prev => prev) // триггер обновления эффекта с зависимостью limitedText и words
+		}
+		window.addEventListener('resize', handleResize)
+		return () => window.removeEventListener('resize', handleResize)
+	}, [])
 
 	useEffect(() => {
 		if (currentCharIndex === 0) return
