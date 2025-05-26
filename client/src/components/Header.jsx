@@ -2,7 +2,7 @@ import React from 'react'
 import '../styles/Header.css'
 
 export function Header() {
-	const iconPath = './src/assets/icons/static'
+	const iconPath = './assets/icons/static'
 	return (
 		<header>
 			<div>

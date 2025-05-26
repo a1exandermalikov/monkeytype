@@ -3,7 +3,7 @@ import '../styles/Nav.css'
 import { useTypingSettings } from '../context/TypingSettingsContext'
 
 export function Nav() {
-	const iconPath = './src/assets/icons'
+	const iconPath = './assets/icons'
 	const { settings, setSettings, isTypingStarted, resetSettings } =
 		useTypingSettings()
 
