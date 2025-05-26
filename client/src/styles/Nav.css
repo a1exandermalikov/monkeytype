@@ -1,0 +1,54 @@
+nav {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 1.5vw;
+}
+
+.nav-buttons {
+	display: flex;
+	align-items: center;
+	background-color: var(--secondary-color);
+	padding: 0.7vw 2vw;
+	width: max-content;
+	border-radius: var(--border-radius);
+	gap: 1.5vw;
+}
+
+.nav-buttons div {
+	display: flex;
+	align-items: center;
+	gap: 2vw;
+}
+
+.nav-buttons hr {
+	width: 0.5vw;
+	background: var(--main-color);
+	border: none;
+	height: 1.5vw;
+	border-radius: var(--border-radius);
+}
+
+.nav-buttons button {
+	background: none;
+	border: none;
+	color: #888;
+	font-size: 1vw;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 0.2vw;
+	font-weight: 400;
+}
+
+.nav-buttons button:hover {
+	filter: brightness(1.5);
+}
+
+.nav-buttons .active {
+	color: var(--brand-color);
+}
+
+.duration {
+	color: #888;
+}

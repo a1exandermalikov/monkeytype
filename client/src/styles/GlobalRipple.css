@@ -1,0 +1,64 @@
+:root {
+	--ripple-color: var(--brand-color, rgba(255, 255, 255, 0.4));
+}
+
+html {
+	backface-visibility: hidden;
+	transform: translateZ(0);
+}
+
+.global-ripple,
+.ripple-splash {
+	will-change: transform, opacity;
+}
+
+.global-ripple {
+	position: fixed;
+	width: 2svw;
+	height: 2svw;
+	margin-left: -1svw;
+	margin-top: -1svw;
+	background: radial-gradient(circle, var(--ripple-color) 20%, transparent 70%);
+	border-radius: 50%;
+	pointer-events: none;
+	transform: scale(0);
+	animation: ripple-wave 500ms ease-in-out forwards;
+	z-index: 9999;
+	opacity: 0.6;
+	filter: none;
+}
+
+.ripple-splash {
+	position: fixed;
+	width: 0.4svw;
+	height: 0.4svw;
+	background: var(--ripple-color);
+	border-radius: 50%;
+	pointer-events: none;
+	z-index: 9999;
+	opacity: 0.5;
+	transform: scale(0.8);
+	filter: drop-shadow(0 0 2px var(--ripple-color));
+	animation: splash 500ms ease-in-out forwards;
+}
+
+@keyframes ripple-wave {
+	0% {
+		transform: scale(0);
+		opacity: 0.6;
+		filter: none;
+	}
+	100% {
+		transform: scale(3.2);
+		opacity: 0;
+		filter: blur(2px);
+	}
+}
+
+@keyframes splash {
+	to {
+		transform: translate(var(--dx), var(--dy)) scale(1.4);
+		opacity: 0;
+		filter: blur(2px);
+	}
+}

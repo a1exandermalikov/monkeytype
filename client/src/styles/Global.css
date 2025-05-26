@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Akaya+Telivigala&family=Fredoka:wght@300..700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+	--main-color: #222222;
+	--secondary-color: #171717;
+	--brand-color: #00c900;
+	--brand-font: 'Akaya Telivigala', cursive;
+	--text-font: 'Montserrat', 'monospace';
+	--system-font: 'Fredoka', monospace;
+	--icon-color: #8a8a8a;
+	--border-radius: 0.5vw;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	user-select: none;
+	-webkit-user-drag: none;
+	outline: none;
+	font-family: var(--system-font);
+	font-weight: 500;
+}
+
+*:focus {
+	outline: none;
+}
+
+body {
+	background-color: var(--main-color);
+}
+
+.icon {
+	width: 1.5vw;
+	cursor: pointer;
+	transition: all 0.1s;
+}
+
+.sIcon {
+	width: 1vw;
+	cursor: pointer;
+}
+
+.icon:hover {
+	filter: brightness(1.5);
+}
+
+.btn {
+	display: grid;
+	place-items: center;
+	transition: all 0.1s;
+}
+
+.btn:active {
+	transform: scale(0.9);
+}

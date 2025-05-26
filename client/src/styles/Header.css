@@ -1,0 +1,30 @@
+header {
+	display: flex;
+	align-items: stretch;
+	padding: 2vw 4vw;
+	justify-content: space-between;
+}
+
+header > div {
+	display: flex;
+	align-items: center;
+	gap: 1.5vw;
+}
+
+.logo {
+	display: flex;
+	align-items: center;
+	gap: 0.5vw;
+}
+
+.logo img {
+	width: 3vw;
+}
+
+.logo h1 {
+	color: white;
+	text-transform: uppercase;
+	font-size: 2.2vw;
+	font-family: var(--brand-font);
+	letter-spacing: 0.1vw;
+}

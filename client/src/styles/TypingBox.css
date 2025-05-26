@@ -1,0 +1,150 @@
+.typing-box {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 4vw;
+}
+
+.text-container {
+	will-change: transform;
+	display: flex;
+	flex-direction: column;
+	align-items: center; /* Центрирует строки по горизонтали */
+	width: 35vw;
+}
+
+.text-line {
+	white-space: nowrap;
+	overflow-wrap: normal;
+	margin: 0.7vw 0;
+	height: 1.9vw;
+	text-align: center; /* Центрирует символы внутри строки */
+}
+
+.char-wrapper {
+	position: relative;
+	display: inline-block;
+}
+
+.char {
+	white-space: pre;
+	font-weight: 400;
+	color: var(--icon-color);
+	position: relative;
+	z-index: 0;
+	font-size: 2vw;
+	user-select: none;
+	font-family: var(--text-font);
+}
+
+.char.typed {
+	color: white; /* введённые символы */
+}
+
+.char.current {
+	color: #888; /* текущий символ (подсвечен иначе) */
+}
+
+.char.error {
+	color: red; /* ошибочные символы */
+}
+
+.caret {
+	position: absolute;
+	width: 2.5px;
+	background: var(--brand-color, #0af);
+	animation: blink 1s step-start 0s infinite;
+	pointer-events: none;
+	z-index: 10;
+	transition: left 0.1s ease, top 0.1s ease;
+}
+
+.typing .caret {
+	animation: none !important; /* отключение анимации при печати */
+}
+
+@keyframes blink {
+	50% {
+		opacity: 0;
+	}
+}
+
+/* Эффект "души", выходящей из буквы при вводе */
+.char-effect {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	z-index: 1;
+	border-radius: 2px;
+	animation: burstUp 0.8s forwards;
+	background: linear-gradient(
+		45deg,
+		rgba(255, 255, 255, 0.8),
+		rgba(255, 255, 255, 0)
+	);
+	filter: drop-shadow(0 0 5px #fff);
+	opacity: 1;
+}
+
+.char.error + .char-effect {
+	background: linear-gradient(45deg, rgba(255, 0, 0, 0.8), rgba(255, 0, 0, 0));
+	filter: drop-shadow(0 0 5px red);
+}
+
+@keyframes burstUp {
+	0% {
+		opacity: 0.2;
+		transform: translateY(0) scale(1);
+	}
+	100% {
+		opacity: 0;
+		transform: translateY(-20px) scale(1.5);
+	}
+}
+
+.status-bar {
+	color: var(--brand-color);
+	font-size: 1.5vw;
+	margin-top: 2vw;
+}
+
+.measure-element {
+	visibility: hidden;
+	position: absolute;
+	white-space: nowrap;
+	font-family: inherit;
+	font-size: inherit;
+	letter-spacing: inherit;
+	word-spacing: inherit;
+	padding: 0;
+	margin: 0;
+	line-height: inherit;
+}
+
+.result {
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	column-gap: 5vw;
+	row-gap: 2vw;
+}
+
+.result p {
+	font-size: 1.5vw;
+	padding: 1vw;
+	color: var(--icon-color);
+	font-weight: 400;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5vw;
+	background-color: var(--secondary-color);
+	border-radius: var(--border-radius);
+}
+
+.result span {
+	color: var(--brand-color);
+	font-size: 2vw;
+}
