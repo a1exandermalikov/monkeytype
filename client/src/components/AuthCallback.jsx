@@ -7,15 +7,15 @@ export default function AuthCallback() {
 
 	useEffect(() => {
 		const handleAuth = async () => {
-			// Разбираем параметры из хэша URL (после #)
-			const hash = window.location.hash.substring(1) // убираем #
-			const params = new URLSearchParams(hash)
+			const hash = window.location.hash.substring(1)
+			const queryString = hash.includes('?') ? hash.split('?')[1] : ''
+			const params = new URLSearchParams(queryString)
 
 			const access_token = params.get('access_token')
 			const refresh_token = params.get('refresh_token')
+			const username = params.get('username') || 'noname'
 
 			if (access_token && refresh_token) {
-				// Устанавливаем сессию вручную из токенов
 				const { error } = await supabase.auth.setSession({
 					access_token,
 					refresh_token,
@@ -26,16 +26,15 @@ export default function AuthCallback() {
 					return
 				}
 
-				// Далее читаем username из query-параметров (после ? в URL)
-				const url = new URL(window.location.href)
-				const username = url.searchParams.get('username') || 'noname'
+				// Получаем пользователя из сессии после установки
+				const {
+					data: { user },
+				} = await supabase.auth.getUser()
 
-				// Обновляем или создаём пользователя
-				const user = supabase.auth.getUser()
 				if (user) {
 					await supabase.from('users').upsert({
-						id: (await user).data.user.id,
-						email: (await user).data.user.email,
+						id: user.id,
+						email: user.email,
 						username,
 						typing_stats: {},
 					})
@@ -43,7 +42,7 @@ export default function AuthCallback() {
 
 				navigate('/login')
 			} else {
-				// Если токенов нет, пробуем получить сессию обычным способом
+				// fallback - если токенов нет, получить сессию как обычно
 				const {
 					data: { session },
 					error,
@@ -55,9 +54,6 @@ export default function AuthCallback() {
 				}
 
 				if (session?.user) {
-					const url = new URL(window.location.href)
-					const username = url.searchParams.get('username') || 'noname'
-
 					await supabase.from('users').upsert({
 						id: session.user.id,
 						email: session.user.email,
