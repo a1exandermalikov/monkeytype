@@ -34,12 +34,14 @@ function Home() {
 function App() {
 	return (
 		<TypingSettingsProvider>
-			<Router>
+			{/* Добавляем basename, чтобы роутер понимал базовый путь */}
+			<Router basename='/monkeytype'>
 				<Routes>
-					<Route path='/monkeytype' element={<Home />} />
-					<Route path='/monkeytype/register' element={<Register />} />
-					<Route path='/monkeytype/login' element={<LogIn />} />
-					<Route path='/monkeytype/auth/callback' element={<AuthCallback />} />
+					{/* Пути уже без /monkeytype, т.к. basename это учитывает */}
+					<Route path='/' element={<Home />} />
+					<Route path='/register' element={<Register />} />
+					<Route path='/login' element={<LogIn />} />
+					<Route path='/auth/callback' element={<AuthCallback />} />
 				</Routes>
 			</Router>
 		</TypingSettingsProvider>

@@ -1,15 +1,18 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../utils/supabaseClient'
+import { Link } from 'react-router-dom'
 import '../styles/Register.css'
 
 export function LogIn() {
+	const basePath = '/monkeytype' // <-- объявляем базовый путь
+
 	const [identifier, setIdentifier] = useState('')
 	const [password, setPassword] = useState('')
 	const [message, setMessage] = useState('')
 
 	useEffect(() => {
 		if (message) {
-			const timer = setTimeout(() => setMessage(''), 3000) // hide after 3 seconds
+			const timer = setTimeout(() => setMessage(''), 3000) // скрыть сообщение через 3 секунды
 			return () => clearTimeout(timer)
 		}
 	}, [message])
@@ -60,9 +63,9 @@ export function LogIn() {
 					required
 				/>
 				<button type='submit'>Log in</button>
-				<a href='/monkeytype/register'>
+				<Link to={`/register`}>
 					Don't have an account? <span>Sign up</span>
-				</a>
+				</Link>
 				{message && <p className='message'>{message}</p>}
 			</form>
 		</div>

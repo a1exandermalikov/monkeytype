@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../utils/supabaseClient'
+import { Link } from 'react-router-dom'
 import '../styles/Register.css'
 
 const emailProviders = {
@@ -12,6 +13,8 @@ const emailProviders = {
 }
 
 export function Register() {
+	const basePath = '/monkeytype' // <-- объявляем базовый путь
+
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const [username, setUsername] = useState('')
@@ -60,7 +63,7 @@ export function Register() {
 			options: {
 				emailRedirectTo: `${
 					window.location.origin
-				}/monkeytype/auth/callback?username=${encodeURIComponent(username)}`,
+				}/auth/callback?username=${encodeURIComponent(username)}`,
 			},
 		})
 
@@ -95,9 +98,9 @@ export function Register() {
 					required
 				/>
 				<button type='submit'>Register</button>
-				<a href='/monkeytype/login'>
+				<Link to={`/login`}>
 					Already have an account? <span>Log in</span>
-				</a>
+				</Link>
 				{message && <p className='message'>{message}</p>}
 			</form>
 		</div>
