@@ -4,15 +4,13 @@ import { Link } from 'react-router-dom'
 import '../styles/Register.css'
 
 export function LogIn() {
-	const basePath = '/monkeytype' // базовый путь
-
 	const [identifier, setIdentifier] = useState('')
 	const [password, setPassword] = useState('')
 	const [message, setMessage] = useState('')
 
 	useEffect(() => {
 		if (message) {
-			const timer = setTimeout(() => setMessage(''), 3000) // скрыть сообщение через 3 секунды
+			const timer = setTimeout(() => setMessage(''), 3000)
 			return () => clearTimeout(timer)
 		}
 	}, [message])

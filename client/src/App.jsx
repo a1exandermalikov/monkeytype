@@ -11,7 +11,7 @@ import {
 	useTypingSettings,
 } from './context/TypingSettingsContext.jsx'
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { HashRouter as Router, Routes, Route } from 'react-router-dom'
 
 function Home() {
 	const { settings } = useTypingSettings()
@@ -34,10 +34,9 @@ function Home() {
 function App() {
 	return (
 		<TypingSettingsProvider>
-			{/* Добавляем basename, чтобы роутер понимал базовый путь */}
-			<Router basename='/monkeytype'>
+			{/* HashRouter автоматически обрабатывает маршруты через # */}
+			<Router>
 				<Routes>
-					{/* Пути уже без /monkeytype, т.к. basename это учитывает */}
 					<Route path='/' element={<Home />} />
 					<Route path='/register' element={<Register />} />
 					<Route path='/login' element={<LogIn />} />

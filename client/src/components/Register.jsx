@@ -9,12 +9,9 @@ const emailProviders = {
 	'yahoo.com': 'https://mail.yahoo.com',
 	'outlook.com': 'https://outlook.live.com',
 	'hotmail.com': 'https://outlook.live.com',
-	// Добавь другие, если нужно
 }
 
 export function Register() {
-	const basePath = '/monkeytype' // базовый путь для роутов и редиректов
-
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const [username, setUsername] = useState('')
@@ -30,7 +27,7 @@ export function Register() {
 			if (redirectUrl) {
 				const timer = setTimeout(() => {
 					window.location.href = redirectUrl
-				}, 3000) // редирект через 3 секунды
+				}, 3000)
 
 				return () => clearTimeout(timer)
 			}
@@ -41,7 +38,6 @@ export function Register() {
 		e.preventDefault()
 		setMessage('')
 
-		// Проверяем, существует ли пользователь с таким email или username
 		const { data: existingUsers, error: checkError } = await supabase
 			.from('users')
 			.select('id')
@@ -63,7 +59,7 @@ export function Register() {
 			options: {
 				emailRedirectTo: `${
 					window.location.origin
-				}/monkeytype/auth/callback?username=${encodeURIComponent(username)}`,
+				}/#/auth/callback?username=${encodeURIComponent(username)}`,
 			},
 		})
 
