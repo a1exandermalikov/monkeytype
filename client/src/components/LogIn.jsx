@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import '../styles/Register.css'
 
 export function LogIn() {
-	const basePath = '/monkeytype' // <-- объявляем базовый путь
+	const basePath = '/monkeytype' // базовый путь
 
 	const [identifier, setIdentifier] = useState('')
 	const [password, setPassword] = useState('')
@@ -63,7 +63,7 @@ export function LogIn() {
 					required
 				/>
 				<button type='submit'>Log in</button>
-				<Link to={`/register`}>
+				<Link to='/register'>
 					Don't have an account? <span>Sign up</span>
 				</Link>
 				{message && <p className='message'>{message}</p>}

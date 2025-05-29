@@ -63,7 +63,7 @@ export function Register() {
 			options: {
 				emailRedirectTo: `${
 					window.location.origin
-				}${basePath}/auth/callback?username=${encodeURIComponent(username)}`,
+				}/monkeytype/auth/callback?username=${encodeURIComponent(username)}`,
 			},
 		})
 
@@ -98,7 +98,7 @@ export function Register() {
 					required
 				/>
 				<button type='submit'>Register</button>
-				<Link to={`${basePath}/login`}>
+				<Link to='/login'>
 					Already have an account? <span>Log in</span>
 				</Link>
 				{message && <p className='message'>{message}</p>}

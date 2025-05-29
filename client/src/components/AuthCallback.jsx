@@ -22,7 +22,7 @@ export default function AuthCallback() {
 					typing_stats: {},
 				})
 
-				navigate('/monkeytype/login')
+				navigate('/login')
 			}
 		}
 
