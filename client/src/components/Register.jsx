@@ -13,7 +13,7 @@ const emailProviders = {
 }
 
 export function Register() {
-	const basePath = '/monkeytype' // <-- объявляем базовый путь
+	const basePath = '/monkeytype' // базовый путь для роутов и редиректов
 
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
@@ -41,7 +41,7 @@ export function Register() {
 		e.preventDefault()
 		setMessage('')
 
-		// Check if user already exists
+		// Проверяем, существует ли пользователь с таким email или username
 		const { data: existingUsers, error: checkError } = await supabase
 			.from('users')
 			.select('id')
@@ -63,7 +63,7 @@ export function Register() {
 			options: {
 				emailRedirectTo: `${
 					window.location.origin
-				}/auth/callback?username=${encodeURIComponent(username)}`,
+				}${basePath}/auth/callback?username=${encodeURIComponent(username)}`,
 			},
 		})
 
@@ -98,7 +98,7 @@ export function Register() {
 					required
 				/>
 				<button type='submit'>Register</button>
-				<Link to={`/login`}>
+				<Link to={`${basePath}/login`}>
 					Already have an account? <span>Log in</span>
 				</Link>
 				{message && <p className='message'>{message}</p>}
