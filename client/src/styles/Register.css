@@ -1,0 +1,94 @@
+.registration-field {
+	display: grid;
+	place-items: center;
+	width: 100vw;
+	height: 100svh;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	width: 30vw;
+	gap: 1vw;
+	align-items: center;
+}
+
+form * {
+	border: none;
+	border-radius: var(--border-radius);
+	font-family: var(--system-font);
+	font-size: 1.5vw;
+    font-weight: 400;
+}
+
+form input {
+	padding: 1vw 1vw;
+	background-color: var(--secondary-color);
+	color: white;
+	width: 100%;
+}
+
+form button {
+	padding: 1vw 1vw;
+	background-color: var(--brand-color);
+	cursor: pointer;
+	font-family: var(--system-font);
+	font-weight: 600;
+	margin-top: 1vw;
+	width: 100%;
+}
+
+form button:hover {
+	filter: brightness(1.5);
+}
+
+form > a {
+	font-size: 1vw;
+	color: var(--icon-color);
+	text-align: center;
+}
+
+form > a span {
+	font-size: 1vw;
+	color: var(--brand-color);
+}
+
+form > a:hover {
+	text-decoration: underline;
+	filter: brightness(1.5);
+}
+
+form > p {
+	top: 0vw;
+	position: absolute;
+	padding: 3vw 3vw;
+	font-size: 1vw;
+	color: red;
+	text-align: center;
+	background-color: var(--secondary-color);
+	opacity: 0;
+}
+
+.message {
+	opacity: 0;
+	animation: fadeInOut 3s ease-in-out forwards;
+}
+
+@keyframes fadeInOut {
+	0% {
+		opacity: 0;
+		top: 1vw;
+	}
+	10% {
+		opacity: 1;
+		top: 2vw;
+	}
+	90% {
+		opacity: 1;
+		top: 2vw;
+	}
+	100% {
+		opacity: 0;
+		top: 1vw;
+	}
+}

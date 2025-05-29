@@ -15,7 +15,7 @@
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
-	user-select: none;
+	/* user-select: none; */
 	-webkit-user-drag: none;
 	outline: none;
 	font-family: var(--system-font);

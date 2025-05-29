@@ -28,9 +28,11 @@ export function Header() {
 					<img className='icon' src={`${iconPath}/notifications.png`} alt='#' />
 				</div>
 
-				<div className='user-avatar btn'>
-					<img className='icon' src={`${iconPath}/user.png`} alt='#' />
-				</div>
+				<a href='/monkeytype/register'>
+					<div className='user-avatar btn'>
+						<img className='icon' src={`${iconPath}/user.png`} alt='#' />
+					</div>
+				</a>
 			</div>
 		</header>
 	)
