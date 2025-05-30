@@ -34,6 +34,10 @@ header > div {
 	object-fit: cover;
 }
 
+.avatar:hover {
+	filter: none;
+}
+
 .user-avatar {
 	display: flex;
 	align-items: center;
@@ -46,4 +50,3 @@ header > div {
 	padding: 0.8vw;
 	border-radius: var(--border-radius);
 }
-

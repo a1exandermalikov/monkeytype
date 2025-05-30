@@ -94,7 +94,7 @@ export function Register() {
 		// Загружаем аватар если выбран
 		if (avatarFile && signUpData?.user?.id) {
 			const fileExt = avatarFile.name.split('.').pop()
-			const filePath = `avatars/${signUpData.user.id}.${fileExt}`
+			const filePath = `${signUpData.user.id}.${fileExt}`
 
 			const { error: uploadError } = await supabase.storage
 				.from('avatars')

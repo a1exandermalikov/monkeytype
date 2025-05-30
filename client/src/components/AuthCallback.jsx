@@ -55,7 +55,7 @@ export default function AuthCallback() {
 					const blob = await base64Response.blob()
 					const ext = blob.type.split('/')[1] || 'jpg'
 					const safeUsername = username.replace(/[^a-zA-Z0-9_-]/g, '_')
-					const path = `avatars/${safeUsername}.${ext}`
+					const path = `${safeUsername}.${ext}` // ← исправили путь
 
 					const { error: uploadError } = await supabase.storage
 						.from('avatars')
