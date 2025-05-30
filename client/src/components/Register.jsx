@@ -74,7 +74,7 @@ export function Register() {
 			options: {
 				emailRedirectTo: `${
 					window.location.origin
-				}/#/auth/callback?username=${encodeURIComponent(username)}`,
+				}/monkeytype/#/auth/callback?username=${encodeURIComponent(username)}`,
 			},
 		})
 
