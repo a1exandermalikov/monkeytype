@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../utils/supabaseClient'
-import { Link, useNavigate } from 'react-router-dom' // <== добавлено useNavigate
+import { Link, useNavigate } from 'react-router-dom'
 import '../styles/Register.css'
 
 export function LogIn() {
 	const [identifier, setIdentifier] = useState('')
 	const [password, setPassword] = useState('')
 	const [message, setMessage] = useState('')
-	const navigate = useNavigate() // <== инициализация
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		if (message) {
@@ -20,31 +20,32 @@ export function LogIn() {
 		e.preventDefault()
 		setMessage('')
 
-		let emailToUse = identifier
+		let emailToUse = identifier.trim().toLowerCase()
 
-		if (!identifier.includes('@')) {
+		if (!emailToUse.includes('@')) {
 			const { data, error } = await supabase
 				.from('users')
 				.select('email')
-				.eq('username', identifier)
+				.eq('username', emailToUse)
 				.single()
 
 			if (error || !data?.email) {
 				setMessage('User with this username not found.')
 				return
 			}
+
 			emailToUse = data.email
 		}
 
 		const { error } = await supabase.auth.signInWithPassword({
 			email: emailToUse,
-			password,
+			password: password.trim(),
 		})
 
 		if (error) {
 			setMessage(error.message)
 		} else {
-			navigate('/') // <== переход на главную
+			navigate('/')
 		}
 	}
 

@@ -17,7 +17,6 @@ export function Register() {
 	const [password, setPassword] = useState('')
 	const [username, setUsername] = useState('')
 	const [message, setMessage] = useState('')
-	const [avatarFile, setAvatarFile] = useState(null)
 	const [avatarPreview, setAvatarPreview] = useState(defaultAvatar)
 
 	const fileInputRef = useRef(null)
@@ -28,12 +27,10 @@ export function Register() {
 		) {
 			const domain = email.split('@')[1]
 			const redirectUrl = emailProviders[domain]
-
 			if (redirectUrl) {
 				const timer = setTimeout(() => {
 					window.location.href = redirectUrl
 				}, 3000)
-
 				return () => clearTimeout(timer)
 			}
 		}
@@ -48,9 +45,7 @@ export function Register() {
 			localStorage.setItem('pendingAvatar', reader.result)
 		}
 		reader.readAsDataURL(file)
-
-		setAvatarFile(file)
-		setAvatarPreview(file ? URL.createObjectURL(file) : defaultAvatar)
+		setAvatarPreview(URL.createObjectURL(file))
 	}
 
 	const handleAvatarClick = () => {
@@ -61,10 +56,14 @@ export function Register() {
 		e.preventDefault()
 		setMessage('')
 
+		const normalizedEmail = email.trim().toLowerCase()
+		const normalizedUsername = username.trim().toLowerCase()
+		const normalizedPassword = password.trim()
+
 		const { data: existingUsers, error: checkError } = await supabase
 			.from('users')
 			.select('id')
-			.or(`email.eq.${email},username.eq.${username}`)
+			.or(`email.eq.${normalizedEmail},username.eq.${normalizedUsername}`)
 
 		if (checkError) {
 			setMessage('Error checking user existence.')
@@ -77,32 +76,20 @@ export function Register() {
 		}
 
 		const { data: signUpData, error } = await supabase.auth.signUp({
-			email,
-			password,
+			email: normalizedEmail,
+			password: normalizedPassword,
 			options: {
 				emailRedirectTo: `${
 					window.location.origin
-				}/monkeytype/#/auth/callback?username=${encodeURIComponent(username)}`,
+				}/monkeytype/#/auth/callback?username=${encodeURIComponent(
+					normalizedUsername
+				)}`,
 			},
 		})
 
 		if (error) {
 			setMessage(error.message)
 			return
-		}
-
-		// Загружаем аватар если выбран
-		if (avatarFile && signUpData?.user?.id) {
-			const fileExt = avatarFile.name.split('.').pop()
-			const filePath = `${signUpData.user.id}.${fileExt}`
-
-			const { error: uploadError } = await supabase.storage
-				.from('avatars')
-				.upload(filePath, avatarFile, { upsert: true })
-
-			if (uploadError) {
-				console.error('Ошибка загрузки аватара:', uploadError)
-			}
 		}
 
 		setMessage('Verification email sent. Please confirm your registration.')
