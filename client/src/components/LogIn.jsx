@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../utils/supabaseClient'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom' // <== добавлено useNavigate
 import '../styles/Register.css'
 
 export function LogIn() {
 	const [identifier, setIdentifier] = useState('')
 	const [password, setPassword] = useState('')
 	const [message, setMessage] = useState('')
+	const navigate = useNavigate() // <== инициализация
 
 	useEffect(() => {
 		if (message) {
@@ -40,7 +41,11 @@ export function LogIn() {
 			password,
 		})
 
-		setMessage(error ? error.message : 'Successfully signed in!')
+		if (error) {
+			setMessage(error.message)
+		} else {
+			navigate('/') // <== переход на главную
+		}
 	}
 
 	return (

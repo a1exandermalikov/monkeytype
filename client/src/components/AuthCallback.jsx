@@ -7,19 +7,13 @@ export default function AuthCallback() {
 
 	useEffect(() => {
 		const handleAuth = async () => {
-			const fullHash = window.location.hash.substring(1) // убираем первый #
-
-			// Разбиваем по второму #, например:
-			// fullHash = "/auth/callback?username=malikov#access_token=...&refresh_token=..."
+			const fullHash = window.location.hash.substring(1)
 			const [pathWithQuery, tokenPart] = fullHash.split('#')
 
-			// Парсим username из pathWithQuery после ?
 			const query = new URLSearchParams(pathWithQuery.split('?')[1])
 			const username = query.get('username') || 'noname'
 
-			// Парсим токены из tokenPart
 			const params = new URLSearchParams(tokenPart || '')
-
 			const access_token = params.get('access_token')
 			const refresh_token = params.get('refresh_token')
 
@@ -39,17 +33,21 @@ export default function AuthCallback() {
 				} = await supabase.auth.getUser()
 
 				if (user) {
+					const defaultAvatarUrl = supabase.storage
+						.from('avatars')
+						.getPublicUrl('default_avatar.jpg').data.publicUrl
+
 					await supabase.from('users').upsert({
 						id: user.id,
 						email: user.email,
 						username,
+						avatar_url: defaultAvatarUrl,
 						typing_stats: {},
 					})
 				}
 
 				navigate('/login')
 			} else {
-				// fallback - если токенов нет, получить сессию как обычно
 				const {
 					data: { session },
 					error,
@@ -61,10 +59,15 @@ export default function AuthCallback() {
 				}
 
 				if (session?.user) {
+					const defaultAvatarUrl = supabase.storage
+						.from('avatars')
+						.getPublicUrl('default_avatar.jpg').data.publicUrl
+
 					await supabase.from('users').upsert({
 						id: session.user.id,
 						email: session.user.email,
 						username,
+						avatar_url: defaultAvatarUrl,
 						typing_stats: {},
 					})
 

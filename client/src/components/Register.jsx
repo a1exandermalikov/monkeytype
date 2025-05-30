@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../utils/supabaseClient'
 import { Link } from 'react-router-dom'
+import defaultAvatar from '/assets/content/default_avatar.jpg'
 import '../styles/Register.css'
 
 const emailProviders = {
@@ -16,6 +17,10 @@ export function Register() {
 	const [password, setPassword] = useState('')
 	const [username, setUsername] = useState('')
 	const [message, setMessage] = useState('')
+	const [avatarFile, setAvatarFile] = useState(null)
+	const [avatarPreview, setAvatarPreview] = useState(defaultAvatar)
+
+	const fileInputRef = useRef(null)
 
 	useEffect(() => {
 		if (
@@ -33,6 +38,16 @@ export function Register() {
 			}
 		}
 	}, [message, email])
+
+	const handleAvatarChange = e => {
+		const file = e.target.files[0]
+		setAvatarFile(file)
+		setAvatarPreview(file ? URL.createObjectURL(file) : defaultAvatar)
+	}
+
+	const handleAvatarClick = () => {
+		fileInputRef.current.click()
+	}
 
 	const handleRegister = async e => {
 		e.preventDefault()
@@ -53,26 +68,52 @@ export function Register() {
 			return
 		}
 
-		const { error } = await supabase.auth.signUp({
+		const { data: signUpData, error } = await supabase.auth.signUp({
 			email,
 			password,
 			options: {
 				emailRedirectTo: `${
 					window.location.origin
-				}/monkeytype/#/auth/callback?username=${encodeURIComponent(username)}`,
+				}/#/auth/callback?username=${encodeURIComponent(username)}`,
 			},
 		})
 
 		if (error) {
 			setMessage(error.message)
-		} else {
-			setMessage('Verification email sent. Please confirm your registration.')
+			return
 		}
+
+		// Загружаем аватар если выбран
+		if (avatarFile && signUpData?.user?.id) {
+			const fileExt = avatarFile.name.split('.').pop()
+			const filePath = `avatars/${signUpData.user.id}.${fileExt}`
+
+			const { error: uploadError } = await supabase.storage
+				.from('avatars')
+				.upload(filePath, avatarFile, { upsert: true })
+
+			if (uploadError) {
+				console.error('Ошибка загрузки аватара:', uploadError)
+			}
+		}
+
+		setMessage('Verification email sent. Please confirm your registration.')
 	}
 
 	return (
 		<div className='registration-field'>
 			<form onSubmit={handleRegister}>
+				<div className='avatar-upload' onClick={handleAvatarClick}>
+					<img src={avatarPreview} alt='Avatar preview' />
+				</div>
+				<input
+					type='file'
+					accept='image/*'
+					onChange={handleAvatarChange}
+					ref={fileInputRef}
+					style={{ display: 'none' }}
+				/>
+
 				<input
 					placeholder='Username'
 					value={username}

@@ -18,7 +18,7 @@ form * {
 	border-radius: var(--border-radius);
 	font-family: var(--system-font);
 	font-size: 1.5vw;
-    font-weight: 400;
+	font-weight: 400;
 }
 
 form input {
@@ -91,4 +91,24 @@ form > p {
 		opacity: 0;
 		top: 1vw;
 	}
+}
+
+.avatar-upload {
+	width: 8vw;
+	height: 8vw;
+	border-radius: 50%;
+	overflow: hidden;
+	margin-bottom: 1.5vw;
+	cursor: pointer;
+	border: 2px solid #ccc;
+}
+
+.avatar-upload:hover {
+	filter: brightness(0.6);
+}
+
+.avatar-upload img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
 }
