@@ -33,3 +33,17 @@ header > div {
 	border-radius: 50%;
 	object-fit: cover;
 }
+
+.user-avatar {
+	display: flex;
+	align-items: center;
+	gap: 0.5vw;
+	font-size: 1vw;
+	color: var(--brand-color);
+	font-family: var(--system-font);
+	font-weight: 500;
+	background-color: var(--secondary-color);
+	padding: 0.8vw;
+	border-radius: var(--border-radius);
+}
+
