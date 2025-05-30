@@ -41,6 +41,14 @@ export function Register() {
 
 	const handleAvatarChange = e => {
 		const file = e.target.files[0]
+		if (!file) return
+
+		const reader = new FileReader()
+		reader.onloadend = () => {
+			localStorage.setItem('pendingAvatar', reader.result)
+		}
+		reader.readAsDataURL(file)
+
 		setAvatarFile(file)
 		setAvatarPreview(file ? URL.createObjectURL(file) : defaultAvatar)
 	}
