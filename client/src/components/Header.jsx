@@ -1,9 +1,34 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { supabase } from '../utils/supabaseClient'
 import '../styles/Header.css'
 
 export function Header() {
 	const iconPath = './assets/icons/static'
+	const [avatarUrl, setAvatarUrl] = useState(null)
+
+	useEffect(() => {
+		const fetchAvatar = async () => {
+			const {
+				data: { user },
+			} = await supabase.auth.getUser()
+
+			if (user) {
+				const { data, error } = await supabase
+					.from('users')
+					.select('avatar_url')
+					.eq('id', user.id)
+					.single()
+
+				if (!error && data?.avatar_url) {
+					setAvatarUrl(data.avatar_url)
+				}
+			}
+		}
+
+		fetchAvatar()
+	}, [])
+
 	return (
 		<header>
 			<div>
@@ -31,7 +56,11 @@ export function Header() {
 
 				<Link to='/register'>
 					<div className='user-avatar btn'>
-						<img className='icon' src={`${iconPath}/user.png`} alt='#' />
+						<img
+							className='icon avatar'
+							src={avatarUrl ? avatarUrl : `${iconPath}/user.png`}
+							alt='user avatar'
+						/>
 					</div>
 				</Link>
 			</div>
