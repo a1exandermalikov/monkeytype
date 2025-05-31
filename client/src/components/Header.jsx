@@ -31,6 +31,9 @@ export function Header() {
 		fetchUserData()
 	}, [])
 
+	// Класс добавляем, если есть username или avatarUrl
+	const avatarClassName = avatarUrl || username ? 'icon avatar' : 'icon'
+
 	return (
 		<header>
 			<div>
@@ -61,7 +64,7 @@ export function Header() {
 					<div className='user-avatar'>
 						{username && <span className='username'>{username}</span>}
 						<img
-							className='icon avatar'
+							className={avatarClassName}
 							src={avatarUrl ? avatarUrl : `${iconPath}/user.png`}
 							alt='user avatar'
 						/>

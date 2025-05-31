@@ -37,7 +37,6 @@ body::-webkit-scrollbar {
 
 .icon {
 	width: 1.5vw;
-	height: 1.5vw;
 	cursor: pointer;
 	transition: all 0.1s;
 }

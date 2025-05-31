@@ -2,26 +2,6 @@ import { useEffect } from 'react'
 import { supabase } from '../utils/supabaseClient'
 import { useNavigate } from 'react-router-dom'
 
-function base64ToBlob(base64Data, contentType = '') {
-	const sliceSize = 512
-	const byteCharacters = atob(base64Data.split(',')[1])
-	const byteArrays = []
-
-	for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-		const slice = byteCharacters.slice(offset, offset + sliceSize)
-
-		const byteNumbers = new Array(slice.length)
-		for (let i = 0; i < slice.length; i++) {
-			byteNumbers[i] = slice.charCodeAt(i)
-		}
-
-		const byteArray = new Uint8Array(byteNumbers)
-		byteArrays.push(byteArray)
-	}
-
-	return new Blob(byteArrays, { type: contentType })
-}
-
 export default function AuthCallback() {
 	const navigate = useNavigate()
 
@@ -37,7 +17,6 @@ export default function AuthCallback() {
 			const access_token = params.get('access_token')
 			const refresh_token = params.get('refresh_token')
 
-			// Устанавливаем сессию вручную, если токены есть
 			if (access_token && refresh_token) {
 				const { error } = await supabase.auth.setSession({
 					access_token,
@@ -59,7 +38,7 @@ export default function AuthCallback() {
 				return
 			}
 
-			// Значение по умолчанию — дефолтный аватар
+			// По умолчанию - дефолтный аватар (публичный URL)
 			let avatar_url = supabase.storage
 				.from('avatars')
 				.getPublicUrl('default_avatar.jpg').data.publicUrl
@@ -67,16 +46,38 @@ export default function AuthCallback() {
 			const pendingAvatar = localStorage.getItem('pendingAvatar')
 			if (pendingAvatar) {
 				try {
-					console.log('PENDING AVATAR:', pendingAvatar)
-
-					const mimeMatch = pendingAvatar.match(/^data:(.*?);base64,/)
+					// Получаем MIME-тип из base64
+					const mimeMatch = pendingAvatar.match(
+						/^data:(image\/[a-zA-Z]+);base64,/
+					)
 					const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg'
-					const blob = base64ToBlob(pendingAvatar, mimeType)
+					const ext = mimeType.split('/')[1] || 'jpeg'
+
+					// Преобразуем base64 в Blob
+					const base64Data = pendingAvatar.split(',')[1]
+					const byteCharacters = atob(base64Data)
+					const byteArrays = []
+					const sliceSize = 512
+
+					for (
+						let offset = 0;
+						offset < byteCharacters.length;
+						offset += sliceSize
+					) {
+						const slice = byteCharacters.slice(offset, offset + sliceSize)
+						const byteNumbers = new Array(slice.length)
+						for (let i = 0; i < slice.length; i++) {
+							byteNumbers[i] = slice.charCodeAt(i)
+						}
+						byteArrays.push(new Uint8Array(byteNumbers))
+					}
+
+					const blob = new Blob(byteArrays, { type: mimeType })
 
 					if (blob.size > 0) {
-						const ext = mimeType.split('/')[1] || 'jpg'
-						const safeUsername = username.replace(/[^a-zA-Z0-9_-]/g, '_')
-						const path = `${safeUsername}.${ext}`
+						// Формируем путь с user_id
+						const safeUserId = user.id.replace(/[^a-zA-Z0-9_-]/g, '_')
+						const path = `${safeUserId}/avatar.${ext}`
 
 						const { error: uploadError } = await supabase.storage
 							.from('avatars')
@@ -115,7 +116,7 @@ export default function AuthCallback() {
 				typing_stats: {},
 			})
 
-			navigate('/login')
+			navigate('/')
 		}
 
 		handleAuth()

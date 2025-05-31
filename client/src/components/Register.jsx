@@ -22,6 +22,13 @@ export function Register() {
 	const fileInputRef = useRef(null)
 
 	useEffect(() => {
+		const savedAvatar = localStorage.getItem('pendingAvatar')
+		if (savedAvatar) {
+			setAvatarPreview(savedAvatar)
+		}
+	}, [])
+
+	useEffect(() => {
 		if (
 			message === 'Verification email sent. Please confirm your registration.'
 		) {
@@ -43,9 +50,9 @@ export function Register() {
 		const reader = new FileReader()
 		reader.onloadend = () => {
 			localStorage.setItem('pendingAvatar', reader.result)
+			setAvatarPreview(reader.result)
 		}
 		reader.readAsDataURL(file)
-		setAvatarPreview(URL.createObjectURL(file))
 	}
 
 	const handleAvatarClick = () => {

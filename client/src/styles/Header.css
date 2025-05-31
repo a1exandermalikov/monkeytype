@@ -32,6 +32,7 @@ header > div {
 .avatar {
 	border-radius: 50%;
 	object-fit: cover;
+	width: 2vw !important;
 }
 
 .avatar:hover {
@@ -41,8 +42,8 @@ header > div {
 .user-avatar {
 	display: flex;
 	align-items: center;
-	gap: 0.5vw;
-	font-size: 1vw;
+	gap: 0.8vw;
+	font-size: 1.3vw;
 	color: var(--brand-color);
 	font-family: var(--system-font);
 	font-weight: 500;

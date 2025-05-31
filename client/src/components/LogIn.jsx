@@ -16,12 +16,30 @@ export function LogIn() {
 		}
 	}, [message])
 
+	const base64ToBlob = (base64, contentType = 'image/png') => {
+		const byteCharacters = atob(base64)
+		const byteArrays = []
+
+		for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+			const slice = byteCharacters.slice(offset, offset + 512)
+			const byteNumbers = new Array(slice.length)
+			for (let i = 0; i < slice.length; i++) {
+				byteNumbers[i] = slice.charCodeAt(i)
+			}
+			const byteArray = new Uint8Array(byteNumbers)
+			byteArrays.push(byteArray)
+		}
+
+		return new Blob(byteArrays, { type: contentType })
+	}
+
 	const handleLogin = async e => {
 		e.preventDefault()
 		setMessage('')
 
 		let emailToUse = identifier.trim().toLowerCase()
 
+		// Поиск email по username
 		if (!emailToUse.includes('@')) {
 			const { data, error } = await supabase
 				.from('users')
@@ -37,16 +55,45 @@ export function LogIn() {
 			emailToUse = data.email
 		}
 
-		const { error } = await supabase.auth.signInWithPassword({
+		// Логин
+		const { data: signInData, error } = await supabase.auth.signInWithPassword({
 			email: emailToUse,
 			password: password.trim(),
 		})
 
 		if (error) {
 			setMessage(error.message)
-		} else {
-			navigate('/')
+			return
 		}
+
+		// Если залогинились и есть pendingAvatar
+		const pendingAvatar = localStorage.getItem('pendingAvatar')
+		if (signInData.user && pendingAvatar) {
+			try {
+				const base64Data = pendingAvatar.split(',')[1]
+				const blob = base64ToBlob(base64Data)
+
+				const fileName = `avatars/${signInData.user.id}/avatar.png`
+
+				const { error: uploadError } = await supabase.storage
+					.from('avatars')
+					.upload(fileName, blob, {
+						contentType: 'image/png',
+						upsert: true,
+					})
+
+				if (uploadError) {
+					console.error('Ошибка загрузки аватара:', uploadError)
+				} else {
+					console.log('Аватар успешно загружен')
+					localStorage.removeItem('pendingAvatar')
+				}
+			} catch (uploadErr) {
+				console.error('Upload error:', uploadErr)
+			}
+		}
+
+		navigate('/')
 	}
 
 	return (
